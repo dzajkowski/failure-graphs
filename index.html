@@ -1,0 +1,76 @@
+<html>
+
+<head>
+  <!-- Load plotly.js into the DOM -->
+  <script src='https://cdn.plot.ly/plotly-2.24.1.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+  <style>
+    .center {
+      border: 5px solid;
+      margin: auto;
+      width: 50%;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id='myDiv1' class="center"><!-- Plotly chart will be drawn inside this DIV --></div>
+  <div id='myDiv2' class="center"><!-- Plotly chart will be drawn inside this DIV --></div>
+  <div id='myDiv3' class="center"><!-- Plotly chart will be drawn inside this DIV --></div>
+  <div id='myDiv4' class="center"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+
+  <script>
+    function draw_plot(file, div, title) {
+      d3.csv(file, function (err, rows) {
+        function unpack(rows, key) {
+          console.log(rows);
+          return rows.map(function (row) { return row[key]; });
+        }
+
+        var z_data = []
+        for (i = 0; i < 50; i++) {
+          z_data.push(unpack(rows, i));
+        }
+
+        y = [35, 105, 175, 245, 315, 385, 455, 525, 595, 665, 735, 805, 875, 945, 1015, 1085, 1155, 1225, 1295, 1365, 1435, 1505, 1575, 1645, 1715, 1785, 1855, 1925, 1995, 2065, 2135, 2205, 2275, 2345, 2415, 2485, 2555, 2625, 2695, 2765, 2835, 2905, 2975, 3045, 3115, 3185, 3255, 3325, 3395, 3465]
+        x = [25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, 725, 750, 775, 800, 825, 850, 875, 900, 925, 950, 975, 1000, 1025, 1050, 1075, 1100, 1125, 1150, 1175, 1200, 1225, 1250]
+
+        var data = [{
+          x: x,
+          y: y,
+          z: z_data,
+          type: 'surface'
+        }];
+
+        var layout = {
+          title: title,
+          autosize: false,
+          width: 1000,
+          height: 1000,
+          margin: {
+            l: 65,
+            r: 50,
+            b: 65,
+            t: 90,
+          },
+          scene: {
+            xaxis: { spikecolor: '#a10000', title: 'Sidechain committee size', autorange: 'reversed', backgroundcolor: 'rgb(230, 242,255)', gridcolor: 'rgb(255, 255, 255)', showbackground: true, zerolinecolor: 'rgb(255, 255, 255)' },
+            yaxis: { title: 'SPO participation in sidechain', backgroundcolor: 'rgb(230, 242,255)', gridcolor: 'rgb(255, 255, 255)', showbackground: true, zerolinecolor: 'rgb(255, 255, 255)' },
+            zaxis: { title: 'Probability of failure', backgroundcolor: 'rgb(230, 230,200)', gridcolor: 'rgb(220, 220, 220)', showbackground: true, zerolinecolor: 'rgb(255, 255, 255)' }
+          },
+        };
+        Plotly.newPlot(div, data, layout);
+      });
+    }
+    draw_plot('data-5.csv', 'myDiv1', '5% adverserial stake participation');
+    draw_plot('data-10.csv', 'myDiv2', '10% adverserial stake participation');
+    draw_plot('data-15.csv', 'myDiv3', '15% adverserial stake participation');
+    draw_plot('data-20.csv', 'myDiv4', '20% adverserial stake participation');
+  </script>
+</body>
+
+
+
+</html>
